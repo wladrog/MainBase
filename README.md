@@ -7,38 +7,6 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-
-
-# TeamCamp – System zarządzania projektami
-
-Projekt zaliczeniowy z przedmiotów:
-- Projektowanie i programowanie systemów internetowych I
-- Systemy bazodanowe
-
-## 👥 Zespół
-- Daniel (backend, baza danych, API)
-- Krystian (frontend, CSS, JS)
-- Władysław (cache, autoryzacja, logger)
-
-## ⚙️ Stack
-- Laravel (PHP)
-- MySQL (Docker)
-- Blade, Bootstrap
-- REST API
-- Git + GitHub
-
-## 📌 Status
-
-| Element                      | Status     |
-|-----------------------------|------------|
-| Inicjalizacja projektu      | ✅ Zrobione |
-| Git + Repozytorium          | ✅ Zrobione |
-| README.md                   | ⬜ Dziś     |
-| Docker + Baza danych        | ⬜ Następnie |
-| Modele ORM + Migracje       | ⬜          |
-| API + formularze            | ⬜          |
-
-
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
