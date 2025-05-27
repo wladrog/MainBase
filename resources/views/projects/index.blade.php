@@ -14,11 +14,22 @@
     @else
         <ul class="list-group">
             @foreach ($projects as $project)
-                <li class="list-group-item">
-                    <strong>{{ $project->name }}</strong><br>
-                    <small>{{ $project->description }}</small>
-                </li>
-            @endforeach
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            <strong>{{ $project->name }}</strong><br>
+            <small>{{ $project->description }}</small>
+        </div>
+        <div>
+            <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-warning me-1">Edit</a>
+            <form method="POST" action="{{ route('projects.destroy', $project->id) }}" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-sm btn-danger">Delete</button>
+            </form>
+        </div>
+    </li>
+@endforeach
+
         </ul>
     @endif
 @endsection
