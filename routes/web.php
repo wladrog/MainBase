@@ -6,7 +6,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect()->route('projects.index');
 });
 
 Route::get('/dashboard', function () {

@@ -10,8 +10,21 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
+
+                    <div class="mt-4">
+                        <a href="{{ route('projects.index') }}"
+                           class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                           
+                            Przejdź do projektów
+                        </a>
+                    
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="mt-8 text-red-600 font-bold text-3xl">
+    TEST DZIAŁA?
+</div>
+
 </x-app-layout>
