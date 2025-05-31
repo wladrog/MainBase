@@ -18,16 +18,18 @@
             @csrf
 
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Project Name</label>
-                <input type="text" name="name" id="name" required
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-            </div>
+    <label for="project_name" class="block text-sm font-medium text-gray-700">Project Name</label>
+    <input type="text" name="project_name" id="project_name" required
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+</div>
+
 
             <div>
                 <label for="description" class="block text-sm font-medium text-gray-700">Description (optional)</label>
                 <textarea name="description" id="description" rows="3"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
             </div>
+            
 
             <button type="submit"
                 class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Create</button>

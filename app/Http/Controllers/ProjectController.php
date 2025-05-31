@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Project;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -21,44 +21,39 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'project_name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
         Project::create($validated);
 
-        return redirect()->route('projects.index')->with('success', 'Project created successfully!');
+        return redirect()->route('projects.index')->with('success', 'Project created.');
     }
 
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
+    public function edit($id)
     {
         $project = Project::findOrFail($id);
         return view('projects.edit', compact('project'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'project_name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
         $project = Project::findOrFail($id);
         $project->update($validated);
 
-        return redirect()->route('projects.index')->with('success', 'Project updated!');
+        return redirect()->route('projects.index')->with('success', 'Project updated.');
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
         $project = Project::findOrFail($id);
         $project->delete();
 
-        return redirect()->route('projects.index')->with('success', 'Project deleted!');
+        return redirect()->route('projects.index')->with('success', 'Project deleted.');
     }
 }

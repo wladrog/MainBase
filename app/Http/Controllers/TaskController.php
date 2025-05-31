@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
     public function index(Project $project)
     {
-        $tasks = $project->tasks()->latest()->get();
+        $tasks = $project->bugs()->get();
         return view('tasks.index', compact('project', 'tasks'));
     }
 
@@ -21,18 +21,19 @@ class TaskController extends Controller
 
     public function store(Request $request, Project $project)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $validated = $request->validate([
+            'description' => 'required|string',
+            'status' => 'nullable|string',
+            'priority' => 'nullable|string',
+            'issue_link' => 'nullable|string'
         ]);
 
-        $project->tasks()->create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'user_id' => auth()->id(),
-        ]);
+        $validated['reported_by_user_id'] = auth()->id();
+        $validated['project_id'] = $project->project_id;
 
-        return redirect()->route('projects.tasks.index', $project)->with('success', 'Task created successfully.');
+        Task::create($validated);
+
+        return redirect()->route('projects.tasks.index', $project)->with('success', 'Task created.');
     }
 
     public function edit(Project $project, Task $task)
@@ -42,12 +43,14 @@ class TaskController extends Controller
 
     public function update(Request $request, Project $project, Task $task)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $validated = $request->validate([
+            'description' => 'required|string',
+            'status' => 'nullable|string',
+            'priority' => 'nullable|string',
+            'issue_link' => 'nullable|string'
         ]);
 
-        $task->update($request->only(['title', 'description']));
+        $task->update($validated);
 
         return redirect()->route('projects.tasks.index', $project)->with('success', 'Task updated.');
     }

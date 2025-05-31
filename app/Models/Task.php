@@ -7,21 +7,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    protected $fillable = ['project_id', 'user_id', 'title', 'description', 'completed'];
+    protected $table = 'bugs';
+    protected $primaryKey = 'bug_id';
+    public $timestamps = false;
 
-    /**
-     * Zadanie należy do projektu
-     */
+    protected $fillable = [
+        'project_id',
+        'description',
+        'status',
+        'priority',
+        'reported_by_user_id',
+        'assigned_to_user_id',
+        'issue_link'
+    ];
+
     public function project(): BelongsTo
     {
-        return $this->belongsTo(Project::class);
-    }
-
-    /**
-     * Zadanie należy do użytkownika
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Project::class, 'project_id');
     }
 }

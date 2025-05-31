@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
 {
-    // Masowe przypisywanie (opcjonalne, ale przydatne)
-    protected $fillable = ['name', 'description'];
+    protected $table = 'projects';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
 
-    /**
-     * Relacja: projekt ma wiele zadań
-     */
-    public function tasks(): HasMany
+    protected $fillable = ['project_name', 'description'];
+
+    public function bugs(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'project_id');
     }
 }

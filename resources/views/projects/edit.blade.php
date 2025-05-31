@@ -17,15 +17,16 @@
         <form method="POST" action="{{ route('projects.update', $project->id) }}" class="space-y-6">
             @csrf
             @method('PUT')
+            
 
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Project Name</label>
+                <label for="project_name" class="block text-sm font-medium text-gray-700">Project Name</label>
                 <input
                     type="text"
-                    name="name"
-                    id="name"
+                    name="project_name"
+                    id="project_name"
                     required
-                    value="{{ old('name', $project->name) }}"
+                    value="{{ old('project_name', $project->project_name) }}"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     autofocus
                 >
