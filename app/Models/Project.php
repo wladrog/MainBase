@@ -13,8 +13,8 @@ class Project extends Model
 
     protected $fillable = ['project_name', 'description'];
 
-    public function bugs(): HasMany
+    public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id');
+        return $this->hasMany(Task::class);
     }
 }
