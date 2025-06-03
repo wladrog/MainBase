@@ -20,7 +20,8 @@ class TaskController extends Controller
     public function create($projectId)
     {
         $project = Project::findOrFail($projectId);
-        $users = User::all(); // Jeśli chcesz przypisywać taski
+        $users = User::all();
+
         return view('tasks.create', compact('project', 'users'));
     }
 
@@ -46,17 +47,15 @@ class TaskController extends Controller
         return redirect()->route('projects.tasks.index', $projectId)->with('success', 'Task created.');
     }
 
-    public function edit($projectId, $taskId)
-    {
-        $task = Task::where('project_id', $projectId)->findOrFail($taskId);
-        $users = User::all();
-        return view('tasks.edit', compact('task', 'users'));
-    }
+    public function edit(Task $task)
+{
+    $project = $task->project; 
+    return view('tasks.edit', compact('task', 'project'));
+}
 
-    public function update(Request $request, $projectId, $taskId)
-    {
-        $task = Task::where('project_id', $projectId)->findOrFail($taskId);
 
+    public function update(Request $request, Task $task)
+    {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -65,18 +64,18 @@ class TaskController extends Controller
             'assigned_to_user_id' => 'nullable|exists:users,id',
         ]);
 
-        $task->update($request->all());
+        $task->update($request->only([
+            'title', 'description', 'status', 'priority', 'assigned_to_user_id'
+        ]));
 
-        return redirect()->route('projects.tasks.index', $projectId)->with('success', 'Task updated.');
+        return redirect()->route('projects.tasks.index', $task->project_id)->with('success', 'Task updated.');
     }
 
-    public function destroy($projectId, $taskId)
+    public function destroy(Task $task)
     {
-        $task = Task::where('project_id', $projectId)->findOrFail($taskId);
+        $projectId = $task->project_id;
         $task->delete();
 
         return redirect()->route('projects.tasks.index', $projectId)->with('success', 'Task deleted.');
     }
 }
-
-

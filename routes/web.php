@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
     // Projects
     Route::resource('projects', ProjectController::class);
 
-    // Tasks nested in Projects
+    // Tasks nested in Projects (shallow routes)
     Route::resource('projects.tasks', TaskController::class)->shallow();
 });
 

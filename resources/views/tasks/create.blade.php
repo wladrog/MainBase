@@ -3,12 +3,12 @@
 @section('title', 'Create Task')
 
 @section('content')
-    <div class="container">
-        <h1 class="mb-4">Create Task for Project: {{ $project->name }}</h1>
+    <div class="max-w-xl mx-auto py-10 px-6">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">Create Task for Project: <span class="text-blue-600">{{ $project->name }}</span></h1>
 
         @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
+            <div class="bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow mb-6">
+                <ul class="list-disc list-inside text-sm">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -16,43 +16,51 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('projects.tasks.store', $project->id) }}">
+        <form method="POST" action="{{ route('projects.tasks.store', $project->id) }}" class="space-y-6">
             @csrf
 
-            <div class="mb-3">
-                <label for="title" class="form-label">Task Title</label>
-                <input type="text" name="title" class="form-control" id="title" required>
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Task Title</label>
+                <input type="text" name="title" id="title" required
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
             </div>
 
-            <div class="mb-3">
-                <label for="description" class="form-label">Description (optional)</label>
-                <textarea name="description" class="form-control" id="description" rows="3"></textarea>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+                <textarea name="description" id="description" rows="3"
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
             </div>
 
-            <div class="mb-3">
-                <label for="status" class="form-label">Status</label>
-                <select name="status" id="status" class="form-select" required>
+            <div>
+                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select name="status" id="status" required
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     <option value="todo">To Do</option>
                     <option value="in_progress">In Progress</option>
                     <option value="done">Done</option>
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label for="priority" class="form-label">Priority</label>
-                <select name="priority" id="priority" class="form-select" required>
+            <div>
+                <label for="priority" class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                <select name="priority" id="priority" required
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label for="assigned_to_user_id" class="form-label">Assign to User (optional)</label>
-                <input type="number" name="assigned_to_user_id" id="assigned_to_user_id" class="form-control" placeholder="User ID">
+            <div>
+                <label for="assigned_to_user_id" class="block text-sm font-medium text-gray-700 mb-1">Assign to User (optional)</label>
+                <input type="number" name="assigned_to_user_id" id="assigned_to_user_id" placeholder="User ID"
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
             </div>
 
-            <button type="submit" class="btn btn-success">Create Task</button>
+            <button type="submit"
+                class="bg-green-600 text-white px-6 py-2 rounded-xl shadow hover:bg-green-700 transition duration-200">
+                Create Task
+            </button>
         </form>
     </div>
 @endsection
