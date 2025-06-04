@@ -50,9 +50,17 @@
             </div>
 
             <div>
-                <label for="assigned_to_user_id" class="block font-medium text-gray-700">Assigned User ID</label>
-                <input type="number" id="assigned_to_user_id" name="assigned_to_user_id" class="w-full border rounded px-3 py-2 mt-1" value="{{ old('assigned_to_user_id', $task->assigned_to_user_id) }}" placeholder="e.g. 5">
-            </div>
+    <label for="assigned_to_user_id" class="block font-medium text-gray-700">Assign to User</label>
+    <select id="assigned_to_user_id" name="assigned_to_user_id" class="w-full border rounded px-3 py-2 mt-1">
+        <option value="">-- None --</option>
+        @foreach ($users as $user)
+            <option value="{{ $user->id }}" {{ $task->assigned_to_user_id == $user->id ? 'selected' : '' }}>
+                {{ $user->name }} ({{ $user->email }})
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
             <div class="flex gap-2">
                 <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">💾 Save</button>

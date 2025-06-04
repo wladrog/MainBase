@@ -53,7 +53,8 @@
                                 @endswitch
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-gray-700">
-                                {{ $task->assignedUser ? $task->assignedUser->username : '—' }}
+                                {{ $task->assignedUser ? $task->assignedUser->name : '—' }}
+
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex gap-2">

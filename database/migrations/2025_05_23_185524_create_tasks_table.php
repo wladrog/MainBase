@@ -18,8 +18,11 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('assigned_to_user_id')->nullable();
             $table->timestamps();
 
-          $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-$table->foreign('assigned_to_user_id')->references('id')->on('users')->onDelete('set null');
+            // Relacje
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('assigned_to_user_id')->references('id')->on('users')->onDelete('set null');
+        });
+    }
 
     public function down()
     {

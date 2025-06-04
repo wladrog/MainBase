@@ -28,6 +28,18 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
+        <!-- Role -->
+<div class="mt-4">
+    <x-input-label for="role" :value="__('Role')" />
+    <select name="role" id="role" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm">
+        <option value="employee">Employee</option>
+        <option value="manager">Manager</option>
+        <option value="admin">Admin</option>
+    </select>
+    <x-input-error :messages="$errors->get('role')" class="mt-2" />
+</div>
+
+
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />

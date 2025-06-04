@@ -49,8 +49,9 @@ class TaskController extends Controller
 
     public function edit(Task $task)
 {
-    $project = $task->project; 
-    return view('tasks.edit', compact('task', 'project'));
+    $project = $task->project;
+    $users = \App\Models\User::all(); 
+    return view('tasks.edit', compact('task', 'project', 'users'));
 }
 
 
