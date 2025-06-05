@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,8 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Dodano nowy projekt przez użytkownika: ' . $request->user()->email);
+
         $validated = $request->validate([
             'project_name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -49,13 +52,17 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('success', 'Project updated.');
     }
 
-    public function destroy(Project $project)
-{
-    logger('Deleting project: ' . $project->id);
-    $project->delete();
+    public function destroy(Request $request, Project $project)
+    {
+        $user = $request->user();
 
-    return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
-}
+        if ($user->role !== 'admin') {
+            return redirect()->route('projects.index')->with('error', 'Brak uprawnień do usuwania projektów.');
+        }
 
-    
+        logger('Deleting project: ' . $project->id);
+        $project->delete();
+
+        return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
+    }
 }

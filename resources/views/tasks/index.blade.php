@@ -7,7 +7,7 @@
         </h1>
 
         <a href="{{ route('projects.tasks.create', $project->id) }}"
-            class="inline-block mb-6 bg-blue-600 text-white px-5 py-2 rounded-xl shadow hover:bg-blue-700 transition duration-200">
+           class="inline-block mb-6 bg-blue-600 text-white px-5 py-2 rounded-xl shadow hover:bg-blue-700 transition duration-200">
             ➕ Add Task
         </a>
 
@@ -54,23 +54,24 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-gray-700">
                                 {{ $task->assignedUser ? $task->assignedUser->name : '—' }}
-
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex gap-2">
                                     <a href="{{ route('tasks.edit', [$project->project_id, $task->id]) }}"
-                                        class="px-3 py-1 rounded-md bg-blue-100 text-blue-800 hover:bg-blue-200 transition text-sm font-medium">
+                                       class="px-3 py-1 rounded-md bg-blue-100 text-blue-800 hover:bg-blue-200 transition text-sm font-medium">
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('tasks.destroy', [$project->project_id, $task->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this task?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="px-3 py-1 rounded-md bg-red-100 text-red-800 hover:bg-red-200 transition text-sm font-medium">
-                                            Delete
-                                        </button>
-                                    </form>
+                                    @can('delete', $task)
+                                        <form action="{{ route('tasks.destroy', [$project->project_id, $task->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="px-3 py-1 rounded-md bg-red-100 text-red-800 hover:bg-red-200 transition text-sm font-medium">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    @endcan
                                 </div>
                             </td>
                         </tr>

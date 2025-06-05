@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class TaskController extends Controller
 {
@@ -48,12 +49,11 @@ class TaskController extends Controller
     }
 
     public function edit(Task $task)
-{
-    $project = $task->project;
-    $users = \App\Models\User::all(); 
-    return view('tasks.edit', compact('task', 'project', 'users'));
-}
-
+    {
+        $project = $task->project;
+        $users = User::all(); 
+        return view('tasks.edit', compact('task', 'project', 'users'));
+    }
 
     public function update(Request $request, Task $task)
     {
@@ -72,8 +72,15 @@ class TaskController extends Controller
         return redirect()->route('projects.tasks.index', $task->project_id)->with('success', 'Task updated.');
     }
 
-    public function destroy(Task $task)
+    public function destroy(Request $request, Task $task)
     {
+        $user = $request->user();
+
+        if (!in_array($user->role, ['admin', 'manager'])) {
+            return redirect()->route('projects.tasks.index', $task->project_id)
+                ->with('error', 'Brak uprawnień do usuwania zadań.');
+        }
+
         $projectId = $task->project_id;
         $task->delete();
 
