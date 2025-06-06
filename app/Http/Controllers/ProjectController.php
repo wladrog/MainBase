@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\Project;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -20,45 +21,48 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Dodano nowy projekt przez użytkownika: ' . $request->user()->email);
+
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'project_name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
         Project::create($validated);
 
-        return redirect()->route('projects.index')->with('success', 'Project created successfully!');
+        return redirect()->route('projects.index')->with('success', 'Project created.');
     }
 
-    public function show(string $id)
-    {
-        //
-    }
-
-    public function edit(string $id)
+    public function edit($id)
     {
         $project = Project::findOrFail($id);
         return view('projects.edit', compact('project'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'project_name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
         $project = Project::findOrFail($id);
         $project->update($validated);
 
-        return redirect()->route('projects.index')->with('success', 'Project updated!');
+        return redirect()->route('projects.index')->with('success', 'Project updated.');
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request, Project $project)
     {
-        $project = Project::findOrFail($id);
+        $user = $request->user();
+
+        if ($user->role !== 'admin') {
+            return redirect()->route('projects.index')->with('error', 'Brak uprawnień do usuwania projektów.');
+        }
+
+        logger('Deleting project: ' . $project->id);
         $project->delete();
 
-        return redirect()->route('projects.index')->with('success', 'Project deleted!');
+        return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
     }
 }

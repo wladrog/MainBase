@@ -1,23 +1,55 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Edit Project</h1>
+    <div class="max-w-2xl mx-auto py-8 px-4">
+        <h1 class="text-2xl font-bold mb-6">Edit Project</h1>
 
-    <form method="POST" action="{{ route('projects.update', $project->id) }}">
-        @csrf
-        @method('PUT')
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-6">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Project Name</label>
-            <input type="text" name="name" value="{{ $project->name }}" class="form-control" required>
-        </div>
+        <form method="POST" action="{{ route('projects.update', $project->id) }}" class="space-y-6">
+            @csrf
+            @method('PUT')
+            
 
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea name="description" class="form-control" rows="3">{{ $project->description }}</textarea>
-        </div>
+            <div>
+                <label for="project_name" class="block text-sm font-medium text-gray-700">Project Name</label>
+                <input
+                    type="text"
+                    name="project_name"
+                    id="project_name"
+                    required
+                    value="{{ old('project_name', $project->project_name) }}"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    autofocus
+                >
+            </div>
 
-        <button type="submit" class="btn btn-success">Update</button>
-        <a href="{{ route('projects.index') }}" class="btn btn-secondary">Cancel</a>
-    </form>
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description (optional)</label>
+                <textarea
+                    name="description"
+                    id="description"
+                    rows="3"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                >{{ old('description', $project->description) }}</textarea>
+            </div>
+
+            <div class="flex space-x-4">
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Update
+                </button>
+                <a href="{{ route('projects.index') }}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
 @endsection

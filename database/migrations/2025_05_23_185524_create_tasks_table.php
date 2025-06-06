@@ -4,30 +4,28 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateTasksTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-{
-    Schema::create('tasks', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('project_id')->constrained()->onDelete('cascade');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->string('title');
-        $table->text('description')->nullable();
-        $table->boolean('completed')->default(false);
-        $table->timestamps();
-    });
-}
+    public function up()
+    {
+        Schema::create('tasks', function (Blueprint $table) {
+            $table->id(); // task_id
+            $table->unsignedBigInteger('project_id');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->enum('status', ['todo', 'in_progress', 'done'])->default('todo');
+            $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
+            $table->unsignedBigInteger('assigned_to_user_id')->nullable();
+            $table->timestamps();
 
+            // Relacje
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->foreign('assigned_to_user_id')->references('id')->on('users')->onDelete('set null');
+        });
+    }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('tasks');
     }
-};
+}

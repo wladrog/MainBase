@@ -2,26 +2,29 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    protected $fillable = ['project_id', 'user_id', 'title', 'description', 'completed'];
+    use HasFactory;
 
-    /**
-     * Zadanie należy do projektu
-     */
-    public function project(): BelongsTo
+    protected $fillable = [
+        'project_id',
+        'title',
+        'description',
+        'status',
+        'priority',
+        'assigned_to_user_id',
+    ];
+
+    public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
-    /**
-     * Zadanie należy do użytkownika
-     */
-    public function user(): BelongsTo
+    public function assignedUser()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'assigned_to_user_id');
     }
 }
