@@ -1,0 +1,312 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{listings}
+\geometry{margin=2.5cm}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection.}{0.5em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Projekt bazy danych}
+\lhead{Kozak \& Rogowski}
+\cfoot{\thepage}
+
+\title{\textbf{Projekt bazy danych}}
+\author{Daniel Kozak, Władysław Rogowski \\
+Collegium Witelona, Wydział Nauk Technicznych i Ekonomicznych \\
+Kierunek: Informatyka}
+\date{Legnica 2025}
+
+\begin{document}
+
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Koncepcja}
+
+\subsection{Cel projektu bazy danych}
+Projektowana baza danych stanowi integralną część aplikacji internetowej służącej do organizacji pracy zespołowej. Baza umożliwia rejestrowanie i zarządzanie zadaniami, monitorowanie postępu realizacji poszczególnych etapów projektu oraz wizualizację podziału obowiązków pomiędzy członków zespołu. System wspiera efektywną współpracę poprzez udostępnienie narzędzi do przypisywania zadań, kontrolowania ich statusu oraz gromadzenia informacji o przebiegu prac. Ponadto baza zapewnia przechowywanie danych dotyczących grup roboczych oraz ich członków, co pozwala na przejrzyste zarządzanie zasobami ludzkimi w ramach realizowanych projektów.
+
+\subsection{Opis dziedziny przedmiotowej}
+Projektowana aplikacja pełni rolę pomocniczego narzędzia wspierającego zespoły programistyczne pracujące nad projektami. Jej głównym celem jest usprawnienie organizacji zadań związanych z naprawą błędów i rozdzielaniem obowiązków w zespole. W przeciwieństwie do standardowych mechanizmów zgłaszania błędów, takich jak GitHub Issues, proponowane rozwiązanie ma na celu uproszczenie wyszukiwania najważniejszych i aktualnych problemów spośród wielu istniejących zgłoszeń, które w dużych projektach mogą być trudne do przefiltrowania i uporządkowania.
+System umożliwia ręczne pobieranie zgłoszeń błędów, które następnie mogą być przypisywane konkretnym członkom zespołu. Aplikacja działa jako lokalny system zarządzania zadaniami, koncentrując się wyłącznie na aktualnych i priorytetowych problemach do rozwiązania, co zwiększa przejrzystość oraz efektywność pracy zespołowej.
+
+\subsection{Założenia wstępne}
+Dla uproszczenia baza danych działa jako system do organizacji pracy nad otwartoźródłowymi projektami, umożliwiający zapisywanie zgłoszeń błędów pochodzących zarówno lokalnie od pracowników i testerów, jak i zdalnie — z systemu GitHub Issues. 
+
+\section{Specyfikacja wymagań systemu}
+
+\subsection{Użytkownicy systemu i ich role}
+
+\textbf{Role administratora:}
+\begin{itemize}
+  \item Testy diagnostyczne bazy danych
+  \item Naprawa bazy danych w przypadku błędów
+  \item Tworzenie kopii zapasowych bazy danych
+  \item Czyszczenie i archiwizacja danych
+  \item Aktualizacja systemu zarządzania bazą danych
+  \item Monitorowanie wydajności
+  \item Monitorowanie prób nieautoryzowanego dostępu
+  \item Tworzenie dokumentacji
+  \item Kontrola zgodności bazy z wymaganiami projektu
+  \item Wsparcie użytkowników
+\end{itemize}
+
+\textbf{Role użytkownika:}
+\begin{itemize}
+  \item Przeglądanie bazy danych do pracy nad projektem
+  \item Zgłoszenie problemów z bazą danych administratorowi
+\end{itemize}
+
+\subsection{Wymagania funkcjonalne}
+
+\begin{itemize}
+  \item Dodawanie nazw i opisów projektów
+  \item Dodawanie/usuwanie zadań do projektu i ustawianie ich priorytetu
+  \item Śledzenie postępu tworzenia poszczególnych funkcji
+  \item Rejestracja użytkowników
+  \item Podział użytkowników na zespoły przez administratora
+  \item Przypisanie użytkowników do zadania
+  \item Wyświetlanie listy aktywnych zadań użytkownika
+\end{itemize}
+
+\subsection{Wymagania niefunkcjonalne}
+
+\begin{itemize}
+  \item Dostęp możliwy tylko po uwierzytelnieniu
+  \item System powinien obsługiwać dużą ilość użytkowników jednocześnie
+  \item Aplikacja powinna być dostępna z poziomu przeglądarki i działać poza siecią lokalną
+  \item Baza danych nie dopuszcza edycji bez autoryzacji administratora
+\end{itemize}
+
+
+\section{Model danych}
+
+\subsection{Schemat bazy danych}
+\begin{center}
+\includegraphics[width=0.9\textwidth]{schema_placeholder.png}
+\end{center}
+\textit{Schemat 1 – Encje bazy danych}
+
+\subsection{Opis poszczególnych encji}
+
+\textbf{Tabela user} – Główna tabela użytkowników systemu. Zawiera dane logowania i podstawowe informacje o użytkowniku.
+
+\begin{itemize}
+  \item \texttt{user\_id} – unikalny identyfikator użytkownika (klucz główny)
+  \item \texttt{username} – unikalna nazwa użytkownika (login); pole wymagane
+  \item \texttt{password\_hash} – zaszyfrowane hasło użytkownika
+  \item \texttt{email} – adres e-mail użytkownika
+  \item \texttt{display\_name} – nazwa wyświetlana (np. imię i nazwisko)
+  \item \texttt{role} – rola użytkownika w systemie
+\end{itemize}
+
+\textbf{Tabela employee} – Rozszerzenie encji user, przechowuje dane pracowników. Użytkownik może, ale nie musi, być pracownikiem.
+
+\begin{itemize}
+  \item \texttt{employee\_id} – identyfikator pracownika, będący jednocześnie kluczem głównym i obcym do \texttt{user.user\_id}
+  \item \texttt{position} – stanowisko pracownika, np. \texttt{Programista}, \texttt{Tester}
+\end{itemize}
+
+\textbf{Tabela project} – Reprezentuje projekty, nad którymi pracują zespoły.
+
+\begin{itemize}
+  \item \texttt{project\_id} – unikalny identyfikator projektu (klucz główny)
+  \item \texttt{project\_name} – nazwa projektu
+  \item \texttt{description} – opis projektu
+\end{itemize}
+
+\textbf{Tabela project\_team} – Łączy użytkowników z projektami oraz określa ich rolę w zespole projektowym.
+
+\begin{itemize}
+  \item \texttt{team\_entry\_id} – identyfikator wpisu (klucz główny)
+  \item \texttt{project\_id} – odniesienie do projektu (\texttt{project.project\_id})
+  \item \texttt{user\_id} – odniesienie do użytkownika (\texttt{user.user\_id})
+  \item \texttt{role} – rola użytkownika w projekcie, np. \texttt{Team Leader}, \texttt{Developer}
+\end{itemize}
+
+\textbf{Tabela bugs} – Przechowuje zgłoszenia błędów (bugów) w projektach.
+
+\begin{itemize}
+  \item \texttt{bug\_id} – unikalny identyfikator błędu (klucz główny)
+  \item \texttt{project\_id} – identyfikator projektu, którego dotyczy błąd
+  \item \texttt{description} – szczegóły zgłoszonego błędu
+  \item \texttt{status} – status błędu, np. \texttt{open}, \texttt{in progress}, \texttt{closed}
+  \item \texttt{priority} – priorytet błędu, np. \texttt{low}, \texttt{medium}, \texttt{high}
+  \item \texttt{reported\_by\_user\_id} – użytkownik zgłaszający błąd
+  \item \texttt{assigned\_to\_user\_id} – użytkownik odpowiedzialny za naprawę
+  \item \texttt{issue\_link} – opcjonalny link do zgłoszenia w zewnętrznym systemie (np. GitHub)
+\end{itemize}
+
+\subsection{Model MVC (Laravel – przykład)}
+
+\begin{lstlisting}[language=PHP, caption=UserFactory.php]
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ */
+class UserFactory extends Factory
+{
+    protected static ?string $password;
+
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => static::$password ??= Hash::make('password'),
+            'remember_token' => Str::random(10),
+        ];
+    }
+
+    public function unverified(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'email_verified_at' => null,
+        ]);
+    }
+}
+\end{lstlisting}
+
+
+
+
+\section{Interfejs użytkownika}
+
+\subsection{Opis GUI}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{gui_register.png}
+\caption{Rejestracja użytkownika}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{gui_login.png}
+\caption{Logowanie do systemu}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{gui_create_project.png}
+\caption{Formularz tworzenia projektu}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{gui_edit_project.png}
+\caption{Edycja projektu}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{gui_task_list.png}
+\caption{Zadania projektu}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{gui_task_edit.png}
+\caption{Edycja zadania projektu}
+\end{figure}
+  
+
+
+\newpage
+\thispagestyle{empty}
+\mbox{}  % pusta strona
+
+\newpage
+\section{Uruchomienie projektu (Docker)}
+
+Projekt został przygotowany do uruchomienia w kontenerach Docker, co pozwala na łatwe wdrożenie środowiska lokalnego bez konieczności ręcznej instalacji zależności. Poniżej przedstawiono kroki niezbędne do uruchomienia aplikacji:
+
+\subsection{Wymagania wstępne}
+\begin{itemize}
+  \item Zainstalowany Docker oraz Docker Compose
+  \item Klon repozytorium projektu
+\end{itemize}
+
+\subsection{Kroki uruchomienia}
+
+\begin{enumerate}
+  \item Sklonuj repozytorium:
+\begin{lstlisting}[language=bash]
+git clone https://github.com/Daniel321W/MainBase
+cd nazwa-projektu
+\end{lstlisting}
+
+  \item Utwórz plik środowiskowy:
+\begin{lstlisting}[language=bash]
+cp .env.example .env
+\end{lstlisting}
+
+  \item Zbuduj kontenery Docker:
+\begin{lstlisting}[language=bash]
+docker-compose build
+\end{lstlisting}
+
+  \item Uruchom kontenery:
+\begin{lstlisting}[language=bash]
+docker-compose up -d
+\end{lstlisting}
+
+  \item Zainstaluj zależności PHP (Laravel):
+\begin{lstlisting}[language=bash]
+docker-compose exec app composer install
+\end{lstlisting}
+
+  \item Wygeneruj klucz aplikacji:
+\begin{lstlisting}[language=bash]
+docker-compose exec app php artisan key:generate
+\end{lstlisting}
+
+  \item Wykonaj migracje bazy danych:
+\begin{lstlisting}[language=bash]
+docker-compose exec app php artisan migrate
+\end{lstlisting}
+
+  \item (Opcjonalnie) wypełnij bazę danymi testowymi:
+\begin{lstlisting}[language=bash]
+docker-compose exec app php artisan db:seed
+\end{lstlisting}
+
+  \item Odwiedź aplikację w przeglądarce:
+\begin{lstlisting}[language=bash]
+http://localhost:8000
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{Zawartość repozytorium}
+\begin{itemize}
+  \item \texttt{docker-compose.yml} – konfiguracja usług (Laravel, MySQL itp.)
+  \item \texttt{Dockerfile} – definicja środowiska aplikacji
+  \item \texttt{.env.example} – szablon pliku konfiguracyjnego środowiska
+  \item \texttt{src/} – katalog z kodem źródłowym aplikacji Laravel
+\end{itemize}
+\end{document}
+
+
+
+
